@@ -28,20 +28,25 @@ WHERE amount > 6.99;
 --Question 3--
 
 SELECT customer_id, amount
-FROM payment;
-
-
-SELECT*
 FROM payment
-WHERE amount = (
-	SELECT amount
-	FROM payment
-	GROUP BY customer_id, payment.amount
-	HAVING COUNT(*) > 175
-	ORDER BY COUNT(*) DESC
+GROUP BY customer_id
+HAVING SUM(amount) = (
+	SELECT customer_id, SUM(amount)
+	FROM payment (
+		SELECT customer_id, SUM(amount)
+		FROM payment 
+		GROUP BY customer_id
+	)
 );
 
---Having some troubles with this one---
+
+SELECT customer_id, SUM(amount)
+FROM payment
+GROUP BY customer_id, payment.amount
+ORDER BY SUM(amount) DESC;
+
+
+--Having some troubles with this one and can't figure it out---
 
 
 
